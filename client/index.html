@@ -3,19 +3,19 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>Bigstock Image Search</title>
-	<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<script src="https://fb.me/react-0.14.6.js"></script>
 	<script src="https://fb.me/react-dom-0.14.6.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser.min.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser.min.js"></script>
 </head>
 <body>
 	<div id="container">
 	TEST
 	</div>
 
-	<!-- script type="text/babel">
-		// var currentPage,
-		// 	searchTerm = "cats";
+	<script type="text/babel">
+		var currentPage,
+			searchTerm = "cats";
 
 		// function getJSON(url, success, error) {
 		//   'use strict';
@@ -50,63 +50,63 @@
 		//   });
 		// }
 
-		// var MyComponent = React.createClass({
-		// 	getDefaultProps: function(){
-		// 		console.log('Invoking the getDefaultProps method');
-		// 		return{
-		// 			myProp: "Foo"
-		// 		};
-		// 	},
-		// 	getInitialState: function(){
-		// 		console.log('Invoking the getInitialState method');
-		// 		return null;
-		// 	},
-		// 	componentWillMount: function(){
-		// 		console.log('Invoking the componentWillMount method');
-		// 	},
-		// 	componentDidMount: function(){
-		// 		console.log('Invoking the componentDidMount method');
-		// 	},
-		// 	render: function(){
-		// 		console.log('Invoking the render method');
-		// 		return(
-		// 				<div>
-		// 					<h1>{this.props.myProp}</h1>
-		// 					<button onClick={this.changeProp}>Change Property</button>
-		// 					<button onClick={this.removeHandler}>Unmount Component</button>
-		// 				</div>
-		// 			)
-		// 	},
-		// 	componentWillReceiveProps: function(){
-		// 		console.log('Invoking the componentWillReceiveProps method');
-		// 	},
-		// 	shouldComponentUpdate: function(){
-		// 		console.log('Invoking the shouldComponentUpdate method');
-		// 		return true;
-		// 	},
-		// 	componentWillUpdate: function(){
-		// 		console.log('Invoking the componentWillUpdate method');
-		// 	},
-		// 	componentDidUpdate: function(){
-		// 		console.log('Invoking the componentDidMount method');
-		// 	},
-		// 	componentWillUnmount: function(){
-		// 		console.log('Invoking the componentWillUnmount method');
-		// 	},
-		// 	changeProp: function(){
-		// 		this.setProps({
-		// 			myProp: "Bar"
-		// 		});
-		// 	},
-		// 	removeHandler: function(){
-		// 		ReactDOM.unmountComponentAtNode(document.getElementById('container'));
-		// 	}
-		// });
+		var MyComponent = React.createClass({
+			getDefaultProps: function(){
+				console.log('Invoking the getDefaultProps method');
+				return{
+					myProp: "Foo"
+				};
+			},
+			getInitialState: function(){
+				console.log('Invoking the getInitialState method');
+				return null;
+			},
+			componentWillMount: function(){
+				console.log('Invoking the componentWillMount method');
+			},
+			componentDidMount: function(){
+				console.log('Invoking the componentDidMount method');
+			},
+			render: function(){
+				console.log('Invoking the render method');
+				return(
+						<div>
+							<h1>{this.props.myProp}</h1>
+							<button onClick={this.changeProp}>Change Property</button>
+							<button onClick={this.removeHandler}>Unmount Component</button>
+						</div>
+					)
+			},
+			componentWillReceiveProps: function(){
+				console.log('Invoking the componentWillReceiveProps method');
+			},
+			shouldComponentUpdate: function(){
+				console.log('Invoking the shouldComponentUpdate method');
+				return true;
+			},
+			componentWillUpdate: function(){
+				console.log('Invoking the componentWillUpdate method');
+			},
+			componentDidUpdate: function(){
+				console.log('Invoking the componentDidMount method');
+			},
+			componentWillUnmount: function(){
+				console.log('Invoking the componentWillUnmount method');
+			},
+			changeProp: function(){
+				this.setProps({
+					myProp: "Bar"
+				});
+			},
+			removeHandler: function(){
+				ReactDOM.unmountComponentAtNode(document.getElementById('container'));
+			}
+		});
 		
-		// ReactDOM.render(
-		// 		<MyComponent />,
-		// 		document.getElementById('container')
-		// 	);
-	</script-->
+		ReactDOM.render(
+				<MyComponent />,
+				document.getElementById('container')
+			);
+	</script>
 </body>
 </html>
