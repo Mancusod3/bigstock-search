@@ -5,9 +5,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // Set Port
-var port_number = server.listen(process.env.PORT || 3000);
-
-app.listen(port_number);
+app.set('port', (process.env.PORT || 3000));
 
 // Set Static Path
 app.use(express.static(path.join(__dirname, 'client')));
