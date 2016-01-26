@@ -1,0 +1,111 @@
+<html>
+<head>
+	<title>Bigstock Image Search</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<script src="https://fb.me/react-0.14.6.js"></script>
+	<script src="https://fb.me/react-dom-0.14.6.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser.min.js"></script>
+</head>
+<body>
+	<div id="container">
+	</div>
+
+	<script type="text/babel">
+		var currentPage,
+			searchTerm = "cats";
+
+		function getJSON(url, success, error) {
+		  'use strict';
+		  var xhr = new XMLHttpRequest();
+		  xhr.onreadystatechange = function () {
+		    if (xhr.readyState === 4) {
+		      if (xhr.status === 200) {
+		        success(JSON.parse(xhr.responseText));
+		      } else {
+		        error(xhr.responseText);
+		      }
+		    }
+		  };
+		  xhr.open('GET', url);
+		  xhr.send();
+		}
+
+		function loadResults() {
+		  getJSON('http://api.bigstockphoto.com/2/883610/search/?q='+searchTerm+'&page=1&callback=someCallback', function (searchResults) {
+		    console.log(searchResults.group);
+		    searchResults.data.images.forEach(function (image) {
+		      getJSON(image, function (image) {
+		        console.log(image);
+		        currentPage = searchResults.data.paging.page;
+		        console.log(currentPage);
+		      }, function (error) {
+		        console.error(error);
+		      });
+		    });
+		  }, function (error) {
+		    console.error(error);
+		  });
+		}
+
+		loadResults();
+
+		var MyComponent = React.createClass({
+			getDefaultProps: function(){
+				console.log('Invoking the getDefaultProps method');
+				return{
+					myProp: "Foo"
+				};
+			},
+			getInitialState: function(){
+				console.log('Invoking the getInitialState method');
+				return null;
+			},
+			componentWillMount: function(){
+				console.log('Invoking the componentWillMount method');
+			},
+			componentDidMount: function(){
+				console.log('Invoking the componentDidMount method');
+			},
+			render: function(){
+				console.log('Invoking the render method');
+				return(
+						<div>
+							<h1>{this.props.myProp}</h1>
+							<button onClick={this.changeProp}>Change Property</button>
+							<button onClick={this.removeHandler}>Unmount Component</button>
+						</div>
+					)
+			},
+			componentWillReceiveProps: function(){
+				console.log('Invoking the componentWillReceiveProps method');
+			},
+			shouldComponentUpdate: function(){
+				console.log('Invoking the shouldComponentUpdate method');
+				return true;
+			},
+			componentWillUpdate: function(){
+				console.log('Invoking the componentWillUpdate method');
+			},
+			componentDidUpdate: function(){
+				console.log('Invoking the componentDidMount method');
+			},
+			componentWillUnmount: function(){
+				console.log('Invoking the componentWillUnmount method');
+			},
+			changeProp: function(){
+				this.setProps({
+					myProp: "Bar"
+				});
+			},
+			removeHandler: function(){
+				ReactDOM.unmountComponentAtNode(document.getElementById('container'));
+			}
+		});
+		
+		ReactDOM.render(
+				<MyComponent />,
+				document.getElementById('container')
+			);
+	</script>
+</body>
+</html>
