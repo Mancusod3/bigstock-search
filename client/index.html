@@ -34,7 +34,7 @@
 		}
 
 		function loadResults() {
-		  getJSON('http://api.bigstockphoto.com/2/883610/search/?q='+searchTerm+'&page=1&callback=someCallback', function (searchResults) {
+		  getJSON('https://api.bigstockphoto.com/2/883610/search/?q='+searchTerm+'&page=1&callback=someCallback', function (searchResults) {
 		    console.log(searchResults.group);
 		    searchResults.data.images.forEach(function (image) {
 		      getJSON(image, function (image) {
