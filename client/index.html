@@ -17,38 +17,40 @@
 		var currentPage,
 			searchTerm = "cats";
 
-		// function getJSON(url, success, error) {
-		//   'use strict';
-		//   var xhr = new XMLHttpRequest();
-		//   xhr.onreadystatechange = function () {
-		//     if (xhr.readyState === 4) {
-		//       if (xhr.status === 200) {
-		//         success(JSON.parse(xhr.responseText));
-		//       } else {
-		//         error(xhr.responseText);
-		//       }
-		//     }
-		//   };
-		//   xhr.open('GET', url);
-		//   xhr.send();
-		// }
+		function getJSON(url, success, error) {
+		  'use strict';
+		  var xhr = new XMLHttpRequest();
+		  xhr.onreadystatechange = function () {
+		    if (xhr.readyState === 4) {
+		      if (xhr.status === 200) {
+		        success(JSON.parse(xhr.responseText));
+		      } else {
+		        error(xhr.responseText);
+		      }
+		    }
+		  };
+		  xhr.open('GET', url);
+		  xhr.send();
+		}
 
-		// function loadResults() {
-		//   getJSON('http://api.bigstockphoto.com/2/883610/search/?q='+searchTerm+'&page=1&callback=someCallback', function (searchResults) {
-		//     console.log(searchResults.group);
-		//     searchResults.data.images.forEach(function (image) {
-		//       getJSON(image, function (image) {
-		//         console.log(image);
-		//         currentPage = searchResults.data.paging.page;
-		//         console.log(currentPage);
-		//       }, function (error) {
-		//         console.error(error);
-		//       });
-		//     });
-		//   }, function (error) {
-		//     console.error(error);
-		//   });
-		// }
+		function loadResults() {
+		  getJSON('http://api.bigstockphoto.com/2/883610/search/?q='+searchTerm+'&page=1&callback=someCallback', function (searchResults) {
+		    console.log(searchResults.group);
+		    searchResults.data.images.forEach(function (image) {
+		      getJSON(image, function (image) {
+		        console.log(image);
+		        currentPage = searchResults.data.paging.page;
+		        console.log(currentPage);
+		      }, function (error) {
+		        console.error(error);
+		      });
+		    });
+		  }, function (error) {
+		    console.error(error);
+		  });
+		}
+
+		loadResults();
 
 		var MyComponent = React.createClass({
 			getDefaultProps: function(){
