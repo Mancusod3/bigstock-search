@@ -7,108 +7,206 @@
 	<script src="https://fb.me/react-0.14.6.js"></script>
 	<script src="https://fb.me/react-dom-0.14.6.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.25/browser.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<style>
+	#batch {
+		background: black;
+		padding-top: 30px;
+		padding-bottom: 30px;
+	}
+	.result {
+		display: inline-block;
+	}
+	.result img {
+	    padding: 10px;
+	}
+	.page-nav {
+		display: none;
+	    height: 100px;
+	    border: 1px solid black;
+	    background: white;
+	    bottom: 0;
+	    position: fixed;
+	}
+	.page-nav:hover, .page-nav:focus {
+	    background-color: black;
+	    color: white;
+	}
+	#searchBox {
+		margin-bottom: 30px;
+	}
+	</style>
 </head>
 <body>
-	<div id="container">
-	TEST
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div id="searchBox"></div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-1 text-center">
+				<button id="page-down" class="page-nav"><span class="glyphicon glyphicon-menu-left"></span></button>
+			</div>
+			<div class="col-xs-10">
+				<div id="resultsArea" class="text-center"></div>
+			</div>
+			<div class="col-xs-1 text-center">
+				<button id="page-up" class="page-nav"><span class="glyphicon glyphicon-menu-right"></span></button>
+			</div>
+		</div>
 	</div>
 
 	<script type="text/babel">
-		var currentPage,
-			searchTerm = "cats";
+		var pageCount = 1,
+		lastSearchTerm,
+		$pageUp = $('#page-up'),
+		$pageDown = $('#page-down')
 
-		function getJSON(url, success, error) {
-		  'use strict';
-		  var xhr = new XMLHttpRequest();
-		  xhr.onreadystatechange = function () {
-		    if (xhr.readyState === 4) {
-		      if (xhr.status === 200) {
-		        success(JSON.parse(xhr.responseText));
-		      } else {
-		        error(xhr.responseText);
-		      }
-		    }
-		  };
-		  xhr.open('GET', url);
-		  xhr.send();
+		function snapToTop(){
+			$('html, body').animate({ scrollTop: 0 }, 'fast');
 		}
 
-		function loadResults() {
-		  getJSON('https://api.bigstockphoto.com/2/883610/search/?q='+searchTerm+'&page=1&callback=someCallback', function (searchResults) {
-		    console.log(searchResults.group);
-		    searchResults.data.images.forEach(function (image) {
-		      getJSON(image, function (image) {
-		        console.log(image);
-		        currentPage = searchResults.data.paging.page;
-		        console.log(currentPage);
-		      }, function (error) {
-		        console.error(error);
-		      });
-		    });
-		  }, function (error) {
-		    console.error(error);
-		  });
-		}
+		$pageUp.click(function(){
+			ReactDOM.unmountComponentAtNode(document.getElementById('resultsArea'));
+			ReactDOM.render(
+				<SearchResults term={lastSearchTerm} page={++pageCount} />,
+				document.getElementById('resultsArea')
+			);
+			$pageDown.show();
+			snapToTop();
+		});
 
-		loadResults();
+		$pageDown.click(function(){
+			if (pageCount == 2) {
+				$pageDown.hide();
+			}
+				ReactDOM.unmountComponentAtNode(document.getElementById('resultsArea'));
+				ReactDOM.render(
+					<SearchResults term={lastSearchTerm} page={--pageCount} />,
+					document.getElementById('resultsArea')
+				);
+				snapToTop();
+			
+		});
 
-		var MyComponent = React.createClass({
-			getDefaultProps: function(){
-				console.log('Invoking the getDefaultProps method');
-				return{
-					myProp: "Foo"
-				};
-			},
-			getInitialState: function(){
-				console.log('Invoking the getInitialState method');
-				return null;
-			},
-			componentWillMount: function(){
-				console.log('Invoking the componentWillMount method');
-			},
-			componentDidMount: function(){
-				console.log('Invoking the componentDidMount method');
+		var Search = React.createClass({
+			sendTerm: function(e){
+				e.preventDefault();
+				var userTerm = this.refs.userTerm.value.trim();
+				ReactDOM.unmountComponentAtNode(document.getElementById('resultsArea'));
+				ReactDOM.render(
+					<SearchResults term={userTerm} page="1" />,
+					document.getElementById('resultsArea')
+				);
+				$pageDown.hide();
+				$pageUp.hide();
+				$pageUp.show();
 			},
 			render: function(){
-				console.log('Invoking the render method');
-				return(
-						<div>
-							<h1>{this.props.myProp}</h1>
-							<button onClick={this.changeProp}>Change Property</button>
-							<button onClick={this.removeHandler}>Unmount Component</button>
-						</div>
-					)
+				return (
+					<div>
+						<form onSubmit={this.sendTerm}>
+							<h1 className="page-header">Bigstock Search</h1>
+						    <div className="input-group">
+								<input type="text" className="form-control" placeholder="Find the perfect image..." ref="userTerm" />
+								<span className="input-group-btn">
+									<button type="submit" value="Submit" className="btn btn-default">Go!</button>
+								</span>
+						    </div>
+						</form>
+					</div>
+				);
+			}
+
+		});
+
+
+		var SearchResults = React.createClass({
+			getInitialState: function() {
+				return {
+					currentPage: this.props.page,
+					searchTerm: this.props.term
+				};
 			},
-			componentWillReceiveProps: function(){
-				console.log('Invoking the componentWillReceiveProps method');
-			},
-			shouldComponentUpdate: function(){
-				console.log('Invoking the shouldComponentUpdate method');
-				return true;
-			},
-			componentWillUpdate: function(){
-				console.log('Invoking the componentWillUpdate method');
-			},
-			componentDidUpdate: function(){
-				console.log('Invoking the componentDidMount method');
-			},
-			componentWillUnmount: function(){
-				console.log('Invoking the componentWillUnmount method');
-			},
-			changeProp: function(){
-				this.setProps({
-					myProp: "Bar"
+			getNewImages: function(term, page){
+				lastSearchTerm = term;
+				var url = 'https://api.bigstockphoto.com/2/883610/search/?q='+term+'&page='+page+'&callback=jsonp';
+				var jqXHR = $.ajax({
+					method: 'GET',
+					url: url,
+					headers: { 'Access-Control-Allow-Origin': '*' },
+					crossDomain: true,
+					dataType: 'jsonp',
+					success: function(data) {
+								var results = data;
+								if(this.isMounted()){
+									this.setState({
+										images: results.data.images,
+										paging: results.data.paging
+									});
+								}
+							}.bind(this)
+				})
+				.fail(function() {
+					alert('Woops, Something went wrong.\n Please Try a different search term!');
+					ReactDOM.unmountComponentAtNode(document.getElementById('resultsArea'));
+					$pageDown.hide();
+					$pageUp.hide();
 				});
 			},
-			removeHandler: function(){
-				ReactDOM.unmountComponentAtNode(document.getElementById('container'));
+			componentDidMount: function() {
+				this.getNewImages(this.state.searchTerm, this.state.currentPage);
+			},
+			render: function() {
+				if (this.state.images) {
+					return <Print data={this.state.images} paging={this.state.paging}/>;
+				}
+				return <div>Loading...</div>;
+			},
+			componentWillReceiveProps: function() {
+				this.setState({
+					currentPage: pageCount,
+					searchTerm: this.props.term
+				});
 			}
 		});
-		
+
+
+		var Print = React.createClass({
+			checkLimit: function(){
+				if ($('#batch').data('page-index') >= this.props.paging.total_pages - 1 ) {
+					$pageUp.hide();
+				}
+			},
+			render: function() {
+				return (
+					<div id="batch" data-page-index={this.props.paging.page}>
+						{this.props.data.map(function(batch, i){
+							return 	<div key={i} className="result">
+										<a href={"http://www.bigstockphoto.com/image-"+batch.id} target="_blank">
+											<img src={batch.small_thumb.url} width={batch.small_thumb.width} height={batch.small_thumb.height} />
+										</a>
+									</div>;
+					    })}
+					</div>
+				);
+			},
+			componentDidMount: function() {
+				this.checkLimit();
+			}
+			,componentDidUpdate: function() {
+				this.checkLimit();
+			}
+		});
+
+
 		ReactDOM.render(
-				<MyComponent />,
-				document.getElementById('container')
-			);
+			<Search />,
+			document.getElementById('searchBox')
+		);
+
+
 	</script>
 </body>
 </html>
